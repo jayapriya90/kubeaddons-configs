@@ -21,9 +21,7 @@ spec:
     - name: none
       enabled: true
   chartReference:
-    chart: defaultstorageclass
-    repo: https://mesosphere.github.io/charts/stable
-    version: 0.0.1
+    chart: /Users/main/go/src/github.com/mesosphere/charts/stable/defaultstorageclass
     values: |
       ---
       issuer:
