@@ -88,6 +88,23 @@ spec:
           thanos:
             baseImage: thanosio/thanos
             version: v0.4.0
+          externalLabels:
+            cluster: $(CLUSTER_ID)
+          containers:
+            - name: get-kubesystem-ns-uid
+              image: gracedo/addon-initializer:latest
+              command: ["/bin/bash", "-c", "addon-initializer prometheus && while true; do sleep 86400; done"]
+              env:
+              - name: "PROMETHEUS_NAMESPACE"
+                value: "kubeaddons"
+              - name: "PROMETHEUS_SERVICE_NAME"
+                value: "prometheus-kubeaddons-prom-prometheus"
+              - name: "CLUSTER_ID_CONFIGMAP"
+                value: "cluster-info-configmap"
+            - name: prometheus-config-reloader
+              envFrom:
+              - configMapRef:
+                  name: cluster-info-configmap
           additionalScrapeConfigs:
             - job_name: 'kubernetes-nodes-containerd'
               metrics_path: /v1/metrics
